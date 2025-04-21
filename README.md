@@ -336,3 +336,42 @@ The instance management section shows the instances that are managed by the Auto
 ## Step 10: Create Target group (app-version2-tg)
 
 A Target group tells a load balancer where to direct traffic to: EC2 instances, fixed IP addresses; or AWS Lambda functions, amongst others.
+
+Target group name: app-version2-tg Protocol: HTTP Port: By default, a load balancer routes requests to its targets using the protocol and port number that you specified when you created the target group. Instance Port: 80
+
+Health checks: The associated load balancer periodically sends requests, per the settings provided, to the registered targets to test their status
+
+Health check protocol: HTTP Health check path: /index.php
+
+Register targets: Do not select any specific instance as targets. Why registering instances as targets is not recommended is, that when that particular instance is down ASG will create a new instance following the health check failed situation. But the new instance which is replaced by the ASG would need to be manually registered to the target group. Hence, We will attach an auto-scaling group to the target group so that the instances created by the ASG will automatically act as targets for the load balancer.
+
+Click on Create Target Group. A Target Group with the name “app-version2-tg” will be created.
+
+Select the target group “app-version2-tg” from the list, you can see no targets under “Registered targets.”
+
+## Step 11: Attach Auto Scaling Group to Target Group
+
+EC2 management console >> Auto-scaling Group >> Select the Auto-scaling Group “app-version2-asg” >> Edit.
+
+Under the Load balancing option, select “Application, Network or Gateway the Load Balancer target groups” Select the Target group we created “app-version2-tg” and click on update.
+
+The instances of the auto-scaling group are attached to the target group now.
+
+## Step 12: Forward 100% of traffic to the new target group (app-version2-tg) using ALB rules.
+
+EC2 console >> Load Balancers >> Click on shopping
+
+Under Listener tab >> Choose HTTPS:443 listener >> Actions >> Manage rules
+
+Edit the rule number 1 where IF = Host is shopping.jeethu.shop
+Select a second target group from the dropdown >> Choose app-version2-tg
+
+![image](https://github.com/user-attachments/assets/66191a24-7334-4db5-9af1-d1bdca443f61)
+
+Enter the weightage in the small box next to the target group box app-version1-tg: 0 (0%) app-version2-tg: 1 (100%)
+
+This allows the ALB to forward 100% of the traffic to the app-version2-tg target group and No traffic to the app-version1-tg target group.
+
+The website/application shopping.jeethu.sop is served fully by the app-version2-tg target group and not by the app-version1-tg target group as in the screenshot
+
+![image](https://github.com/user-attachments/assets/e70449ce-3d79-4d3c-a4d4-ab878883f846)
