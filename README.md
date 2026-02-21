@@ -375,3 +375,14 @@ This allows the ALB to forward 100% of the traffic to the app-version2-tg target
 The website/application shopping.jeethu.sop is served fully by the app-version2-tg target group and not by the app-version1-tg target group as in the screenshot
 
 ![image](https://github.com/user-attachments/assets/e70449ce-3d79-4d3c-a4d4-ab878883f846)
+
+# Canary Deployment: The Gradual Revolution
+While blue-green deployment is an all-or-nothing switch, canary deployment takes a more gradual approach. The term comes from the historical practice of using canary birds in coal mines to detect dangerous gases – if the canary died, the miners knew to evacuate.
+
+### Implementation Details
+In a canary deployment, we:
+
+- Deploy the new version alongside the old version.
+- Route a small percentage of traffic to the new version.
+- Gradually increase the traffic if metrics look good.
+- Roll back if we detect issues.
